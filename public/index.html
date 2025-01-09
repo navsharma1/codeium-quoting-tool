@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Quoting Tool</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="app">
+        <div class="login-container" id="loginContainer">
+            <h1>Salesforce Quoting Tool</h1>
+            <form id="loginForm" class="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        
+        <div class="dashboard hidden" id="dashboard">
+            <nav class="navbar">
+                <h2>Welcome, <span id="userDisplay"></span></h2>
+                <button id="logoutBtn">Logout</button>
+            </nav>
+            
+            <div class="content">
+                <div class="quotes-section">
+                    <h3>Recent Quotes</h3>
+                    <div id="quotesList"></div>
+                    <button id="createQuoteBtn">Create New Quote</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/app.js"></script>
+</body>
+</html>
