@@ -8,6 +8,10 @@ command = ""
 [site]
 bucket = "./public"
 
+[[routes]]
+pattern = "/api/*"
+script = "api/[[route]].js"
+
 [env.production]
 vars = { ENVIRONMENT = "production" }
 
