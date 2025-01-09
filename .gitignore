@@ -20,9 +20,16 @@ var/
 .installed.cfg
 *.egg
 
-# Virtual Environment
-venv/
-ENV/
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
 
 # IDE
 .idea/
@@ -30,18 +37,6 @@ ENV/
 *.swp
 *.swo
 
-# Environment variables
-.env
-
-# Node
-node_modules/
-npm-debug.log*
-
-# Cloudflare
-.wrangler/
-.cloudflare/
-.dev.vars
-
-# Large files
-*.pkg
-rustup-init.sh
+# OS
+.DS_Store
+Thumbs.db

@@ -4,6 +4,7 @@ compatibility_flags = ["nodejs_compat"]
 
 [site]
 bucket = "."
+include = ["*.html", "*.css", "*.js"]
 
 [build]
 command = ""

@@ -1,25 +1,20 @@
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    const corsHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    };
-
-    // Handle CORS preflight requests
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        headers: corsHeaders
-      });
-    }
-
+    
     // API Routes
     if (url.pathname.startsWith('/api')) {
       const headers = {
-        ...corsHeaders,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
         'Content-Type': 'application/json'
       };
+
+      // Handle CORS preflight
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { headers });
+      }
 
       // Login endpoint
       if (url.pathname === '/api/login' && request.method === 'POST') {
@@ -54,7 +49,6 @@ export default {
         }), { headers });
       }
 
-      // If no matching API route
       return new Response(JSON.stringify({
         error: 'Not Found'
       }), {
@@ -63,25 +57,7 @@ export default {
       });
     }
 
-    // Try to serve static files
-    try {
-      // Special case for root path
-      if (url.pathname === '/') {
-        return env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
-      }
-
-      // Try to serve the requested file
-      const response = await env.ASSETS.fetch(request);
-      
-      // If the response is not ok, throw an error to trigger the catch block
-      if (!response.ok) {
-        throw new Error('File not found');
-      }
-      
-      return response;
-    } catch (error) {
-      // For any error or 404, serve index.html for client-side routing
-      return env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
-    }
+    // Let Pages handle static files
+    return env.ASSETS.fetch(request);
   }
 };
