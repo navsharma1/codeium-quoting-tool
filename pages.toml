@@ -1,0 +1,14 @@
+[build]
+command = "pip install -r requirements.txt"
+
+[env]
+FLASK_APP = "app.py"
+FLASK_ENV = "production"
+
+[functions]
+directory = "functions"
+
+[[redirects]]
+from = "/*"
+to = "/functions/_worker.js"
+status = 200

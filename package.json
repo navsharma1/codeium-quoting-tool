@@ -1,0 +1,17 @@
+{
+  "name": "codeium-quoting-tool",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev"
+  },
+  "dependencies": {
+    "hono": "^3.0.0",
+    "jsforce": "^1.11.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.100.0"
+  }
+}

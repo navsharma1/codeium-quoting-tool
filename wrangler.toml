@@ -1,0 +1,15 @@
+name = "codeium-quoting-tool"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+[vars]
+FLASK_SECRET_KEY = ""  # Will be set via wrangler secret
+SF_USERNAME = ""       # Will be set via wrangler secret
+SF_PASSWORD = ""       # Will be set via wrangler secret
+SF_SECURITY_TOKEN = "" # Will be set via wrangler secret
+SF_DOMAIN = ""        # Will be set via wrangler secret
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "57834df751b244f4a99d8b9d261a406a"

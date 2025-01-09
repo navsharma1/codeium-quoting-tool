@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+            <h1 class="text-xl font-semibold text-gray-900">Create Quote</h1>
+            <p class="mt-2 text-sm text-gray-700">Create a new quote for your customer.</p>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="mt-4 p-4 rounded-md {% if category == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="mt-8 space-y-8">
+        <!-- Customer Information -->
+        <div class="bg-white shadow sm:rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6 border-b border-gray-200 gradient-bg">
+                <h3 class="text-lg font-medium leading-6 text-white">Customer Information</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                    <div>
+                        <label for="customer_name" class="block text-sm font-medium text-gray-700">Customer Name</label>
+                        <input type="text" name="customer_name" id="customer_name" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="customer_email" class="block text-sm font-medium text-gray-700">Customer Email</label>
+                        <input type="email" name="customer_email" id="customer_email" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <input type="tel" name="phone" id="phone"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"
+                               placeholder="+1 (555) 123-4567">
+                    </div>
+                    <div>
+                        <label for="partner" class="block text-sm font-medium text-gray-700">Partner</label>
+                        <input type="text" name="partner" id="partner"
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"
+                               placeholder="Partner Company Name">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label for="street-address" class="block text-sm font-medium text-gray-700">Billing Address</label>
+                    <input type="text" name="street_address" id="street-address" required
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"
+                           placeholder="Street Address">
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                        <input type="text" name="city" id="city" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="state" class="block text-sm font-medium text-gray-700">State / Province</label>
+                        <input type="text" name="state" id="state" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="postal-code" class="block text-sm font-medium text-gray-700">ZIP / Postal Code</label>
+                        <input type="text" name="postal_code" id="postal-code" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote Details -->
+        <div class="mt-6 bg-white shadow sm:rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6 border-b border-gray-200 gradient-bg">
+                <h3 class="text-lg font-medium leading-6 text-white">Quote Details</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-3">
+                    <div>
+                        <label for="quote-number" class="block text-sm font-medium text-gray-700">Quote Number</label>
+                        <input type="text" name="quote_number" id="quote-number" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"
+                               placeholder="Q-2025-001">
+                    </div>
+                    <div>
+                        <label for="payment-terms" class="block text-sm font-medium text-gray-700">Payment Terms</label>
+                        <select name="payment_terms" id="payment-terms" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                            <option value="">Select payment terms</option>
+                            <option value="net30">Net 30</option>
+                            <option value="net60">Net 60</option>
+                            <option value="net90">Net 90</option>
+                            <option value="immediate">Due on Receipt</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="opportunity" class="block text-sm font-medium text-gray-700">Opportunity</label>
+                        <input type="text" name="opportunity_id" id="opportunity" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="expiration_date" class="block text-sm font-medium text-gray-700">Expiration Date</label>
+                        <input type="date" name="expiration_date" id="expiration_date" required
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="mt-6 bg-white shadow sm:rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6 border-b border-gray-200 gradient-bg">
+                <h3 class="text-lg font-medium leading-6 text-white">Products</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <div class="mt-6">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">Product</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 fixed-credits-column">Prompt Credits/mo</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 fixed-credits-column">Flow Credits/mo</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 flex-credits-column">Flex Credits/mo</th>
+                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Monthly Price</th>
+                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Discount %</th>
+                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Final Price</th>
+                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Quantity</th>
+                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                    <button type="button" onclick="addProductRow()"
+                                            class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                        Add Product
+                                    </button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-container" class="divide-y divide-gray-200 bg-white">
+                            <!-- Product rows will be added here -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="border-t border-gray-200">
+                                <th scope="row" colspan="7" class="px-3 py-4 text-right text-sm font-semibold text-gray-900">
+                                    Blended Discount:
+                                </th>
+                                <td class="px-3 py-4 text-right text-sm text-gray-900" id="blended-discount"></td>
+                            </tr>
+                            <tr class="border-t border-gray-200">
+                                <th scope="row" colspan="7" class="px-3 py-4 text-right text-sm font-semibold text-gray-900">
+                                    Total Monthly:
+                                </th>
+                                <td class="px-3 py-4 text-right text-sm text-gray-900" id="total-monthly"></td>
+                            </tr>
+                            <tr class="border-t border-gray-200">
+                                <th scope="row" colspan="7" class="px-3 py-4 text-right text-sm font-semibold text-gray-900">
+                                    Total Annual:
+                                </th>
+                                <td class="px-3 py-4 text-right text-sm text-gray-900" id="total-annual"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end space-x-3">
+            <button type="submit" name="action" value="draft"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-gray-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                Save as Draft
+            </button>
+            <button type="submit" name="action" value="submit"
+                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Submit for Approval
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    // Store products data
+    const products = {{ products|tojson|safe }};
+    let hasFixedCredits = false;
+    let hasFlexCredits = false;
+    
+    function formatCurrency(amount, timeframe = '') {
+        const formatted = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount);
+        return timeframe ? `${formatted}/${timeframe}` : formatted;
+    }
+    
+    function calculateAnnualPrice(monthlyPrice) {
+        return monthlyPrice * 12;
+    }
+
+    function calculateDiscountedPrice(price, discount) {
+        return price * (1 - discount / 100);
+    }
+    
+    function updateCreditsColumnVisibility() {
+        const fixedCreditsHeaders = document.querySelectorAll('.fixed-credits-column');
+        const flexCreditsHeaders = document.querySelectorAll('.flex-credits-column');
+        
+        fixedCreditsHeaders.forEach(header => {
+            header.style.display = hasFixedCredits ? 'table-cell' : 'none';
+        });
+        
+        flexCreditsHeaders.forEach(header => {
+            header.style.display = hasFlexCredits ? 'table-cell' : 'none';
+        });
+    }
+    
+    function updateRowTotal(rowId) {
+        const select = document.querySelector(`#product-row-${rowId} select[name="products[]"]`);
+        const product = products.find(p => p.Id === select.value);
+        if (!product) return;
+        
+        const discount = parseFloat(document.getElementById(`discount-${rowId}`).value) || 0;
+        const quantity = parseInt(document.getElementById(`quantity-${rowId}`).value) || 1;
+        const monthlyPrice = product.UnitPrice;
+        const finalMonthlyPrice = calculateDiscountedPrice(monthlyPrice, discount) * quantity;
+        
+        document.getElementById(`final-price-${rowId}`).textContent = formatCurrency(finalMonthlyPrice, 'mo');
+        updateTotals();
+    }
+    
+    function updateTotals() {
+        let totalMonthly = 0;
+        let totalBeforeDiscount = 0;
+        let weightedDiscount = 0;
+        
+        document.querySelectorAll('select[name="products[]"]').forEach((select) => {
+            const product = products.find(p => p.Id === select.value);
+            if (product) {
+                const rowId = select.closest('tr').id.split('-')[2];
+                const discount = parseFloat(document.getElementById(`discount-${rowId}`).value) || 0;
+                const quantity = parseInt(document.getElementById(`quantity-${rowId}`).value) || 1;
+                const monthlyPrice = product.UnitPrice;
+                const rowTotal = monthlyPrice * quantity;
+                
+                totalBeforeDiscount += rowTotal;
+                weightedDiscount += (discount * rowTotal);
+                totalMonthly += calculateDiscountedPrice(monthlyPrice, discount) * quantity;
+            }
+        });
+        
+        const blendedDiscount = totalBeforeDiscount > 0 ? 
+            (weightedDiscount / totalBeforeDiscount).toFixed(1) : 
+            '0.0';
+            
+        document.getElementById('blended-discount').textContent = `${blendedDiscount}%`;
+        document.getElementById('total-monthly').textContent = formatCurrency(totalMonthly, 'mo');
+        document.getElementById('total-annual').textContent = formatCurrency(totalMonthly * 12, 'yr');
+    }
+    
+    function updateProductDetails(select, rowId) {
+        const product = products.find(p => p.Id === select.value);
+        const oldHasFixed = hasFixedCredits;
+        const oldHasFlex = hasFlexCredits;
+        hasFixedCredits = false;
+        hasFlexCredits = false;
+        
+        // Check if any selected product has credits
+        document.querySelectorAll('select[name="products[]"]').forEach(select => {
+            const selectedProduct = products.find(p => p.Id === select.value);
+            if (selectedProduct && selectedProduct.Type === 'Credits') {
+                if (selectedProduct.CreditType === 'Fixed') {
+                    hasFixedCredits = true;
+                } else if (selectedProduct.CreditType === 'Flex') {
+                    hasFlexCredits = true;
+                }
+            }
+        });
+        
+        if (oldHasFixed !== hasFixedCredits || oldHasFlex !== hasFlexCredits) {
+            updateCreditsColumnVisibility();
+        }
+        
+        if (product) {
+            document.getElementById(`description-${rowId}`).textContent = product.Description;
+            document.getElementById(`type-${rowId}`).textContent = product.Type;
+            document.getElementById(`prompt-credits-${rowId}`).textContent = 
+                product.MonthlyPromptCredits ? product.MonthlyPromptCredits.toLocaleString() : '-';
+            document.getElementById(`flow-credits-${rowId}`).textContent = 
+                product.MonthlyFlowCredits ? product.MonthlyFlowCredits.toLocaleString() : '-';
+            document.getElementById(`flex-credits-${rowId}`).textContent = 
+                product.MonthlyFlexCredits ? product.MonthlyFlexCredits.toLocaleString() : '-';
+            document.getElementById(`monthly-price-${rowId}`).textContent = formatCurrency(product.UnitPrice, 'mo');
+            updateRowTotal(rowId);
+        } else {
+            document.getElementById(`description-${rowId}`).textContent = '';
+            document.getElementById(`type-${rowId}`).textContent = '';
+            document.getElementById(`prompt-credits-${rowId}`).textContent = '';
+            document.getElementById(`flow-credits-${rowId}`).textContent = '';
+            document.getElementById(`flex-credits-${rowId}`).textContent = '';
+            document.getElementById(`monthly-price-${rowId}`).textContent = '';
+            document.getElementById(`final-price-${rowId}`).textContent = '';
+            updateTotals();
+        }
+    }
+    
+    function addProductRow() {
+        const container = document.getElementById('products-container');
+        const rowId = Date.now();
+        
+        const row = document.createElement('tr');
+        row.id = `product-row-${rowId}`;
+        row.innerHTML = `
+            <td class="py-4 pl-4 pr-3">
+                <select name="products[]" required onchange="updateProductDetails(this, ${rowId})"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm">
+                    <option value="">Select a product</option>
+                    ${products.map(p => `<option value="${p.Id}" data-price="${p.UnitPrice}">${p.Name}</option>`).join('')}
+                </select>
+            </td>
+            <td class="px-3 py-4 text-sm text-gray-500" id="description-${rowId}"></td>
+            <td class="px-3 py-4 text-sm text-gray-500" id="type-${rowId}"></td>
+            <td class="px-3 py-4 text-sm text-gray-500 fixed-credits-column" id="prompt-credits-${rowId}"></td>
+            <td class="px-3 py-4 text-sm text-gray-500 fixed-credits-column" id="flow-credits-${rowId}"></td>
+            <td class="px-3 py-4 text-sm text-gray-500 flex-credits-column" id="flex-credits-${rowId}"></td>
+            <td class="px-3 py-4 text-right text-sm text-gray-500" id="monthly-price-${rowId}"></td>
+            <td class="px-3 py-4">
+                <input type="number" name="discounts[]" min="0" max="100" value="0" 
+                       class="block w-20 rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"
+                       onchange="updateRowTotal(${rowId})" id="discount-${rowId}">
+            </td>
+            <td class="px-3 py-4 text-right text-sm text-gray-500" id="final-price-${rowId}"></td>
+            <td class="px-3 py-4">
+                <input type="number" name="quantities[]" min="1" value="1" required
+                       class="block w-20 rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 sm:text-sm"
+                       onchange="updateRowTotal(${rowId})" id="quantity-${rowId}">
+            </td>
+            <td class="relative py-4 pl-3 pr-4 text-right sm:pr-6">
+                <button type="button" onclick="removeProductRow(${rowId})"
+                        class="text-red-600 hover:text-red-900">Remove</button>
+            </td>
+        `;
+        
+        container.appendChild(row);
+        updateCreditsColumnVisibility();
+    }
+    
+    function removeProductRow(rowId) {
+        const row = document.getElementById(`product-row-${rowId}`);
+        row.remove();
+        
+        // Recheck if any remaining products have credits
+        hasFixedCredits = false;
+        hasFlexCredits = false;
+        document.querySelectorAll('select[name="products[]"]').forEach(select => {
+            const selectedProduct = products.find(p => p.Id === select.value);
+            if (selectedProduct && selectedProduct.Type === 'Credits') {
+                if (selectedProduct.CreditType === 'Fixed') {
+                    hasFixedCredits = true;
+                } else if (selectedProduct.CreditType === 'Flex') {
+                    hasFlexCredits = true;
+                }
+            }
+        });
+        updateCreditsColumnVisibility();
+        updateTotals();
+    }
+    
+    // Add first product row by default
+    document.addEventListener('DOMContentLoaded', function() {
+        addProductRow();
+        updateCreditsColumnVisibility();
+    });
+</script>
+{% endblock scripts %}
