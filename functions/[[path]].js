@@ -57,7 +57,21 @@ export default {
       });
     }
 
-    // Let Pages handle static files
-    return env.ASSETS.fetch(request);
+    // Try to serve static files
+    try {
+      // Special case for root path
+      if (url.pathname === '/') {
+        return env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
+      }
+
+      const response = await env.ASSETS.fetch(request);
+      if (!response.ok) {
+        throw new Error('File not found');
+      }
+      return response;
+    } catch (error) {
+      // For client-side routing, serve index.html for any unmatched routes
+      return env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
+    }
   }
 };

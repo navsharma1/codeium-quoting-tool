@@ -4,10 +4,12 @@ compatibility_flags = ["nodejs_compat"]
 
 [site]
 bucket = "./public"
-include = ["*.html", "*.css", "*.js"]
 
 [build]
 command = ""
 
-[pages]
-pages_build_output_dir = "public"
+[env.production]
+routes = [
+  { pattern = "/api/*", script = "[[path]].js" },
+  { pattern = "/*", static = "public" }
+]
