@@ -1,8 +1,0 @@
-{
-  "name": "codeium-quoting-tool-functions",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "@cloudflare/workers-types": "^4.20231218.0"
-  }
-}

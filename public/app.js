@@ -10,9 +10,9 @@ const createQuoteBtn = document.getElementById('createQuoteBtn');
 // API Endpoints
 const API_URL = '/api';
 const endpoints = {
-    login: '/login',
-    quotes: '/quotes',
-    createQuote: '/quotes/create'
+    login: '/api/login',
+    quotes: '/api/quotes',
+    createQuote: '/api/quotes/create'
 };
 
 // State Management

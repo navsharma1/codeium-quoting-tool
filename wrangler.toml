@@ -4,12 +4,3 @@ compatibility_flags = ["nodejs_compat"]
 
 [site]
 bucket = "./public"
-
-[build]
-command = ""
-
-[env.production]
-vars = { ENVIRONMENT = "production" }
-
-[env.development]
-vars = { ENVIRONMENT = "development" }
