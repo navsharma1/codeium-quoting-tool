@@ -18,13 +18,22 @@ const endpoints = {
 let currentUser = null;
 
 // Event Listeners
-loginForm.addEventListener('submit', handleLogin);
-logoutBtn.addEventListener('click', handleLogout);
-createQuoteBtn.addEventListener('click', handleCreateQuote);
+if (!loginForm || !logoutBtn || !createQuoteBtn) {
+    console.error('Required DOM elements not found:', {
+        loginForm: !!loginForm,
+        logoutBtn: !!logoutBtn,
+        createQuoteBtn: !!createQuoteBtn
+    });
+} else {
+    loginForm.addEventListener('submit', handleLogin);
+    logoutBtn.addEventListener('click', handleLogout);
+    createQuoteBtn.addEventListener('click', handleCreateQuote);
+}
 
 // Login Handler
 async function handleLogin(e) {
     e.preventDefault();
+    console.log('Login attempt...');
     
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -36,6 +45,7 @@ async function handleLogin(e) {
     submitBtn.innerHTML = '<div class="loading"></div>';
 
     try {
+        console.log('Sending login request...');
         const response = await fetch(endpoints.login, {
             method: 'POST',
             headers: {
@@ -45,6 +55,7 @@ async function handleLogin(e) {
         });
 
         const data = await response.json();
+        console.log('Login response:', data);
 
         if (data.success) {
             currentUser = data.user;
@@ -66,6 +77,7 @@ async function handleLogin(e) {
 
 // Logout Handler
 function handleLogout() {
+    console.log('Logging out...');
     currentUser = null;
     localStorage.removeItem('session');
     loginContainer.classList.remove('hidden');
@@ -75,6 +87,7 @@ function handleLogout() {
 
 // Show Dashboard
 function showDashboard() {
+    console.log('Showing dashboard...');
     loginContainer.classList.add('hidden');
     dashboard.classList.remove('hidden');
     userDisplay.textContent = currentUser.username;
@@ -83,8 +96,10 @@ function showDashboard() {
 // Load Quotes
 async function loadQuotes() {
     try {
+        console.log('Loading quotes...');
         const response = await fetch(endpoints.quotes);
         const data = await response.json();
+        console.log('Quotes response:', data);
         
         if (!data.quotes) {
             throw new Error('Invalid response format');
@@ -106,19 +121,20 @@ async function loadQuotes() {
 }
 
 // Create Quote Handler
-async function handleCreateQuote() {
-    // This would typically open a modal or navigate to a create quote form
+function handleCreateQuote() {
+    console.log('Create quote clicked');
     alert('Create quote functionality coming soon!');
 }
 
 // View Quote Handler
 function viewQuote(id) {
-    // This would typically navigate to a quote detail view
+    console.log('View quote clicked:', id);
     alert(`Viewing quote ${id}`);
 }
 
 // Initialize
 function init() {
+    console.log('Initializing app...');
     // Check for existing session
     const session = localStorage.getItem('session');
     if (session) {
@@ -133,4 +149,6 @@ function init() {
     }
 }
 
-init();
+// Start the app
+console.log('Starting app...');
+document.addEventListener('DOMContentLoaded', init);
