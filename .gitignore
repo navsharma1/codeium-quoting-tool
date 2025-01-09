@@ -41,3 +41,7 @@ npm-debug.log*
 .wrangler/
 .cloudflare/
 .dev.vars
+
+# Large files
+*.pkg
+rustup-init.sh
