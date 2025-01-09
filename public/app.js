@@ -10,9 +10,9 @@ const createQuoteBtn = document.getElementById('createQuoteBtn');
 // API Endpoints
 const API_URL = '/api';
 const endpoints = {
-    login: `${API_URL}/login`,
-    quotes: `${API_URL}/quotes`,
-    createQuote: `${API_URL}/quotes/create`
+    login: '/login',
+    quotes: '/quotes',
+    createQuote: '/quotes/create'
 };
 
 // State Management
@@ -37,7 +37,7 @@ async function handleLogin(e) {
     submitBtn.innerHTML = '<div class="loading"></div>';
 
     try {
-        const response = await fetch(endpoints.login, {
+        const response = await fetch(`${API_URL}${endpoints.login}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ function showDashboard() {
 // Load Quotes
 async function loadQuotes() {
     try {
-        const response = await fetch(endpoints.quotes);
+        const response = await fetch(`${API_URL}${endpoints.quotes}`);
         const data = await response.json();
         
         if (!data.quotes) {
