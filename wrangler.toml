@@ -2,12 +2,13 @@ name = "codeium-quoting-tool"
 compatibility_date = "2024-01-08"
 compatibility_flags = ["nodejs_compat"]
 
-[site]
-bucket = "."
+pages_build_output_dir = "dist"
 
 [build]
-command = "npm install && npm run build"
-output_dir = "dist"
+command = "npm install"
+
+[site]
+bucket = "."
 
 [env.production]
 name = "codeium-quoting-tool-prod"

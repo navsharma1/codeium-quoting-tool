@@ -5,7 +5,8 @@
   "main": "functions/_worker.js",
   "scripts": {
     "dev": "wrangler pages dev .",
-    "deploy": "wrangler pages deploy ."
+    "deploy": "wrangler pages deploy .",
+    "build": "mkdir -p dist && cp -r static/* dist/ 2>/dev/null || true"
   },
   "dependencies": {
     "hono": "^3.11.7",
