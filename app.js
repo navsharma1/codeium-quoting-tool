@@ -8,7 +8,6 @@ const logoutBtn = document.getElementById('logoutBtn');
 const createQuoteBtn = document.getElementById('createQuoteBtn');
 
 // API Endpoints
-const API_URL = '/api';
 const endpoints = {
     login: '/api/login',
     quotes: '/api/quotes',
@@ -37,7 +36,7 @@ async function handleLogin(e) {
     submitBtn.innerHTML = '<div class="loading"></div>';
 
     try {
-        const response = await fetch(`${API_URL}${endpoints.login}`, {
+        const response = await fetch(endpoints.login, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -84,7 +83,7 @@ function showDashboard() {
 // Load Quotes
 async function loadQuotes() {
     try {
-        const response = await fetch(`${API_URL}${endpoints.quotes}`);
+        const response = await fetch(endpoints.quotes);
         const data = await response.json();
         
         if (!data.quotes) {
