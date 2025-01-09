@@ -1,28 +1,8 @@
 name = "codeium-quoting-tool"
 compatibility_date = "2024-01-08"
 compatibility_flags = ["nodejs_compat"]
-
+main = "./functions/[[path]].js"
 pages_build_output_dir = "dist"
-
-[build]
-command = "npm install"
-
-[site]
-bucket = "."
-
-[env.production]
-name = "codeium-quoting-tool-prod"
-
-[env.staging]
-name = "codeium-quoting-tool-staging"
 
 [vars]
 FLASK_SECRET_KEY = ""  # Will be set via wrangler secret
-SF_USERNAME = ""       # Will be set via wrangler secret
-SF_PASSWORD = ""       # Will be set via wrangler secret
-SF_SECURITY_TOKEN = "" # Will be set via wrangler secret
-SF_DOMAIN = ""        # Will be set via wrangler secret
-
-[[kv_namespaces]]
-binding = "SESSIONS"
-id = "57834df751b244f4a99d8b9d261a406a"
