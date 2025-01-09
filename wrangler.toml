@@ -1,7 +1,19 @@
 name = "codeium-quoting-tool"
-compatibility_date = "2024-09-23"
+compatibility_date = "2024-01-08"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "dist"
+
+[site]
+bucket = "."
+
+[build]
+command = "npm install && npm run build"
+output_dir = "dist"
+
+[env.production]
+name = "codeium-quoting-tool-prod"
+
+[env.staging]
+name = "codeium-quoting-tool-staging"
 
 [vars]
 FLASK_SECRET_KEY = ""  # Will be set via wrangler secret
