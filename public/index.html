@@ -4,42 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salesforce Quoting Tool</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <div class="login-container" id="loginContainer">
-            <h1>Salesforce Quoting Tool</h1>
-            <form id="loginForm" class="login-form">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-        </div>
-        
-        <div class="dashboard hidden" id="dashboard">
-            <nav class="navbar">
-                <h2>Welcome, <span id="userDisplay"></span></h2>
-                <button id="logoutBtn">Logout</button>
-            </nav>
-            
-            <div class="content">
-                <div class="quotes-section">
-                    <h3>Recent Quotes</h3>
-                    <div id="quotesList"></div>
-                    <button id="createQuoteBtn">Create New Quote</button>
-                </div>
-            </div>
-        </div>
+    <div class="container">
+        <h1>Salesforce Quoting Tool</h1>
+        <p>Welcome to the quoting tool. This is a test page.</p>
+        <div id="status">Checking connection...</div>
     </div>
+
     <script>
-        // Add a simple check to ensure the page is loading
         console.log('Page loaded');
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError: ' + error);
-            return false;
-        };
+        document.getElementById('status').textContent = 'Page is working!';
+        
+        // Test API connection
+        fetch('/api/quotes')
+            .then(response => response.json())
+            .then(data => {
+                console.log('API Response:', data);
+                document.getElementById('status').textContent = 'API is working! Found ' + data.quotes.length + ' quotes.';
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+                document.getElementById('status').textContent = 'Error connecting to API: ' + error.message;
+            });
     </script>
-    <script src="app.js"></script>
 </body>
 </html>

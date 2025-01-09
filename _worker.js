@@ -1,6 +1,8 @@
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    
+    // Set CORS headers
     const headers = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -16,35 +18,12 @@ export default {
     if (url.pathname.startsWith('/api')) {
       headers['Content-Type'] = 'application/json';
 
-      // Login endpoint
-      if (url.pathname === '/api/login' && request.method === 'POST') {
-        try {
-          const body = await request.json();
-          return new Response(JSON.stringify({
-            success: true,
-            user: {
-              username: body.username,
-              role: 'user'
-            }
-          }), { headers });
-        } catch (error) {
-          return new Response(JSON.stringify({
-            success: false,
-            error: 'Invalid request'
-          }), {
-            headers,
-            status: 400
-          });
-        }
-      }
-
-      // Quotes endpoint
-      if (url.pathname === '/api/quotes' && request.method === 'GET') {
+      // Test quotes endpoint
+      if (url.pathname === '/api/quotes') {
         return new Response(JSON.stringify({
           quotes: [
-            { id: 1, name: 'Enterprise Solution', amount: 50000 },
-            { id: 2, name: 'Small Business Package', amount: 10000 },
-            { id: 3, name: 'Startup Plan', amount: 5000 }
+            { id: 1, name: 'Test Quote 1', amount: 1000 },
+            { id: 2, name: 'Test Quote 2', amount: 2000 }
           ]
         }), { headers });
       }
@@ -57,48 +36,26 @@ export default {
 
     // Serve static files
     try {
-      // Always serve index.html for the root path
+      let response = await env.ASSETS.fetch(request);
+      
+      // If accessing the root, serve index.html
       if (url.pathname === '/') {
-        const response = await env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
-        return new Response(response.body, {
-          ...response,
-          headers: {
-            ...response.headers,
-            'Content-Type': 'text/html;charset=UTF-8'
-          }
-        });
+        response = await env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
       }
 
-      // Try to serve the requested file
-      const response = await env.ASSETS.fetch(request);
-      if (!response.ok) throw new Error('File not found');
-
-      // Set appropriate content type for common file types
-      const ext = url.pathname.split('.').pop().toLowerCase();
-      const contentTypes = {
-        'js': 'application/javascript',
-        'css': 'text/css',
-        'html': 'text/html',
-        'json': 'application/json'
-      };
+      // Add security headers
+      const newHeaders = new Headers(response.headers);
+      newHeaders.set('X-Content-Type-Options', 'nosniff');
+      newHeaders.set('X-Frame-Options', 'DENY');
+      newHeaders.set('X-XSS-Protection', '1; mode=block');
 
       return new Response(response.body, {
-        ...response,
-        headers: {
-          ...response.headers,
-          'Content-Type': contentTypes[ext] || 'text/plain'
-        }
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders
       });
-    } catch {
-      // Serve index.html for client-side routing
-      const response = await env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
-      return new Response(response.body, {
-        ...response,
-        headers: {
-          ...response.headers,
-          'Content-Type': 'text/html;charset=UTF-8'
-        }
-      });
+    } catch (error) {
+      return new Response('Not Found', { status: 404 });
     }
   }
 };
