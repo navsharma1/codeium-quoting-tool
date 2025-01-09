@@ -1,17 +1,17 @@
 {
   "name": "codeium-quoting-tool",
   "version": "1.0.0",
-  "private": true,
+  "description": "Salesforce Quoting Tool",
+  "main": "functions/_worker.js",
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev"
+    "dev": "wrangler pages dev .",
+    "deploy": "wrangler pages deploy ."
   },
   "dependencies": {
-    "hono": "^3.0.0",
-    "jsforce": "^1.11.0"
+    "hono": "^3.11.7",
+    "jsforce": "^1.11.1"
   },
   "devDependencies": {
-    "wrangler": "^3.100.0"
+    "wrangler": "^3.22.1"
   }
 }
