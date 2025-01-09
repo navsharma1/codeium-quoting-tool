@@ -12,7 +12,7 @@
             background: #f0f2f5;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             background: white;
             padding: 20px;
@@ -23,29 +23,61 @@
             color: #1a73e8;
             margin-bottom: 20px;
         }
+        #status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #e6f4ea;
+            color: #1e8e3e;
+        }
+        .error {
+            background: #fce8e6;
+            color: #d93025;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Salesforce Quoting Tool</h1>
-        <p>Welcome to the quoting tool. This is a test page.</p>
         <div id="status">Checking connection...</div>
+        <div id="quotes"></div>
     </div>
 
     <script>
-        console.log('Page loaded');
-        document.getElementById('status').textContent = 'Page is working!';
-        
+        // Function to update status
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = isError ? 'error' : 'success';
+        }
+
+        // Function to display quotes
+        function displayQuotes(quotes) {
+            const quotesDiv = document.getElementById('quotes');
+            quotesDiv.innerHTML = quotes.map(quote => `
+                <div class="quote">
+                    <h3>${quote.name}</h3>
+                    <p>Amount: $${quote.amount}</p>
+                </div>
+            `).join('');
+        }
+
         // Test API connection
         fetch('/api/quotes')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('API request failed');
+                return response.json();
+            })
             .then(data => {
                 console.log('API Response:', data);
-                document.getElementById('status').textContent = 'API is working! Found ' + data.quotes.length + ' quotes.';
+                updateStatus('Connected to API successfully');
+                displayQuotes(data.quotes);
             })
             .catch(error => {
                 console.error('API Error:', error);
-                document.getElementById('status').textContent = 'Error connecting to API: ' + error.message;
+                updateStatus('Error connecting to API: ' + error.message, true);
             });
     </script>
 </body>

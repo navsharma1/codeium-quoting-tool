@@ -1,3 +1,9 @@
 name = "codeium-quoting-tool"
 compatibility_date = "2024-01-08"
 compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "./public"
+
+[build]
+command = ""
