@@ -10,6 +10,8 @@
             margin: 0;
             padding: 20px;
             background: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
         }
         .container {
             max-width: 800px;
@@ -22,63 +24,18 @@
         h1 {
             color: #1a73e8;
             margin-bottom: 20px;
+            text-align: center;
         }
-        #status {
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .success {
-            background: #e6f4ea;
-            color: #1e8e3e;
-        }
-        .error {
-            background: #fce8e6;
-            color: #d93025;
+        p {
+            margin-bottom: 16px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Salesforce Quoting Tool</h1>
-        <div id="status">Checking connection...</div>
-        <div id="quotes"></div>
+        <p>Welcome to the Salesforce Quoting Tool. This is a test page to verify static file serving.</p>
+        <p>If you can see this page, static file serving is working correctly.</p>
     </div>
-
-    <script>
-        // Function to update status
-        function updateStatus(message, isError = false) {
-            const status = document.getElementById('status');
-            status.textContent = message;
-            status.className = isError ? 'error' : 'success';
-        }
-
-        // Function to display quotes
-        function displayQuotes(quotes) {
-            const quotesDiv = document.getElementById('quotes');
-            quotesDiv.innerHTML = quotes.map(quote => `
-                <div class="quote">
-                    <h3>${quote.name}</h3>
-                    <p>Amount: $${quote.amount}</p>
-                </div>
-            `).join('');
-        }
-
-        // Test API connection
-        fetch('/api/quotes')
-            .then(response => {
-                if (!response.ok) throw new Error('API request failed');
-                return response.json();
-            })
-            .then(data => {
-                console.log('API Response:', data);
-                updateStatus('Connected to API successfully');
-                displayQuotes(data.quotes);
-            })
-            .catch(error => {
-                console.error('API Error:', error);
-                updateStatus('Error connecting to API: ' + error.message, true);
-            });
-    </script>
 </body>
 </html>
