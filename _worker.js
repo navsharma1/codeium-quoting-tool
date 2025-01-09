@@ -3,46 +3,26 @@ export default {
     try {
       const url = new URL(request.url);
       
-      // Set CORS headers
+      // Basic CORS headers
       const headers = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
       };
-
-      // Handle CORS preflight
-      if (request.method === 'OPTIONS') {
-        return new Response(null, { headers });
-      }
-
-      // API Routes
-      if (url.pathname.startsWith('/api')) {
-        headers['Content-Type'] = 'application/json';
-
-        // Test quotes endpoint
-        if (url.pathname === '/api/quotes') {
-          return new Response(JSON.stringify({
-            quotes: [
-              { id: 1, name: 'Test Quote 1', amount: 1000 },
-              { id: 2, name: 'Test Quote 2', amount: 2000 }
-            ]
-          }), { headers });
-        }
-
-        return new Response(JSON.stringify({ error: 'Not Found' }), {
-          headers,
-          status: 404
-        });
-      }
 
       // Handle root path
       if (url.pathname === '/' || url.pathname === '') {
-        const response = await env.ASSETS.fetch(`${url.origin}/index.html`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch index.html: ${response.status}`);
-        }
-        return new Response(response.body, {
-          status: 200,
+        return new Response(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>Test Page</title>
+            </head>
+            <body>
+              <h1>Test Page</h1>
+              <p>If you can see this, the worker is functioning correctly.</p>
+            </body>
+          </html>
+        `, {
           headers: {
             'Content-Type': 'text/html;charset=UTF-8',
             ...headers
@@ -50,25 +30,27 @@ export default {
         });
       }
 
-      // Serve other static files
-      const response = await env.ASSETS.fetch(request);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${url.pathname}: ${response.status}`);
+      // Simple test API endpoint
+      if (url.pathname === '/api/test') {
+        return new Response(JSON.stringify({ status: 'ok' }), {
+          headers: {
+            'Content-Type': 'application/json',
+            ...headers
+          }
+        });
       }
 
-      // Add security headers
-      const newHeaders = new Headers(response.headers);
-      Object.entries(headers).forEach(([key, value]) => {
-        newHeaders.set(key, value);
-      });
-
-      return new Response(response.body, {
-        status: 200,
-        headers: newHeaders
+      // Return 404 for all other paths
+      return new Response('Not Found', {
+        status: 404,
+        headers
       });
     } catch (error) {
+      // Log the error
       console.error('Worker error:', error);
-      return new Response(`Error: ${error.message}`, { 
+      
+      // Return a simple error response
+      return new Response('Internal Server Error', {
         status: 500,
         headers: {
           'Content-Type': 'text/plain',
