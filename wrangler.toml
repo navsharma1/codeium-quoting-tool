@@ -1,16 +1,7 @@
 name = "codeium-quoting-tool"
 compatibility_date = "2024-01-08"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "dist"
-
-[build]
-command = "pip install -r requirements.txt && python build.py"
-
-[site]
-bucket = "./dist"
-
-[env.production]
-name = "codeium-quoting-tool-prod"
+main = "./functions/[[path]].js"
 
 [vars]
 FLASK_SECRET_KEY = ""  # Will be set via wrangler secret
