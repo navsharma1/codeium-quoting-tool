@@ -7,3 +7,11 @@ bucket = "./public"
 
 [build]
 command = ""
+
+[env.production]
+routes = [
+  { pattern = "/", zone_name = "codeium-quoting-tool.pages.dev" }
+]
+
+[pages]
+pages_build_output_dir = "public"

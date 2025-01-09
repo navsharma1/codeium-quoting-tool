@@ -39,44 +39,18 @@ export default {
       }
 
       // Serve static files
-      try {
-        // Try to serve the requested file
-        const response = await env.ASSETS.fetch(request);
-        
-        // Add CORS and security headers
-        const newHeaders = new Headers(response.headers);
-        Object.entries(headers).forEach(([key, value]) => {
-          newHeaders.set(key, value);
-        });
+      let response;
+      
+      // If root path, serve index.html
+      if (url.pathname === '/' || url.pathname === '') {
+        response = await env.ASSETS.fetch(new Request(url.origin + '/index.html'));
+      } else {
+        response = await env.ASSETS.fetch(request);
+      }
 
-        // If it's HTML, ensure correct content type
-        if (url.pathname.endsWith('.html') || url.pathname === '/') {
-          newHeaders.set('Content-Type', 'text/html;charset=UTF-8');
-        }
-
-        return new Response(response.body, {
-          status: response.status,
-          headers: newHeaders
-        });
-      } catch (error) {
-        console.error('Static file error:', error);
-        
-        // If root path or not found, serve index.html
-        if (url.pathname === '/' || url.pathname === '') {
-          try {
-            const indexResponse = await env.ASSETS.fetch(new Request(`${url.origin}/index.html`, request));
-            return new Response(indexResponse.body, {
-              status: 200,
-              headers: {
-                'Content-Type': 'text/html;charset=UTF-8',
-                ...headers
-              }
-            });
-          } catch (indexError) {
-            console.error('Index.html error:', indexError);
-          }
-        }
-
+      // If file not found, return 404
+      if (!response.ok) {
+        console.error('File not found:', url.pathname);
         return new Response('Not Found', { 
           status: 404,
           headers: {
@@ -85,6 +59,36 @@ export default {
           }
         });
       }
+
+      // Add CORS headers to the response
+      const newHeaders = new Headers(response.headers);
+      Object.entries(headers).forEach(([key, value]) => {
+        newHeaders.set(key, value);
+      });
+
+      // Set content type based on file extension
+      const ext = url.pathname.split('.').pop().toLowerCase();
+      const contentTypes = {
+        'html': 'text/html;charset=UTF-8',
+        'js': 'application/javascript',
+        'css': 'text/css',
+        'json': 'application/json',
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'gif': 'image/gif',
+        'svg': 'image/svg+xml',
+        'ico': 'image/x-icon'
+      };
+
+      if (contentTypes[ext]) {
+        newHeaders.set('Content-Type', contentTypes[ext]);
+      }
+
+      return new Response(response.body, {
+        status: 200,
+        headers: newHeaders
+      });
     } catch (error) {
       console.error('Worker error:', error);
       return new Response('Internal Server Error', {
